@@ -7,11 +7,12 @@ const PORT = config.PORT;
 
 app.use(express.json());
 
-app.use(errorHandler);
 
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Hello from Express with TypeScript and ESM!' });
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
