@@ -3,6 +3,8 @@ import config from './config';
 import { errorHandler } from './middlewares/error.middleware';
 import { requestLogger } from './middlewares/logger.middleware';
 import logger from './config/logger';
+import { startConsumer } from './kafka/consumer';
+import { connectProducer } from './kafka/producer';
 
 const app = express();
 const PORT = config.PORT;
@@ -18,6 +20,13 @@ app.get('/', (req: Request, res: Response) => {
 app.use(errorHandler);
 app.use(requestLogger);
 
-app.listen(PORT, () => {
-  logger.info(`⚡️[server]: Server is running at http://localhost:${PORT}`);
-});
+const start = async () => {
+  await connectProducer();
+  await startConsumer();
+  app.listen(PORT, () => {
+    logger.info(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+  });
+};
+
+start();
+
