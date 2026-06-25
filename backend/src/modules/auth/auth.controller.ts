@@ -10,7 +10,20 @@ export const login = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    const token = await authService.login(req.body);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    return sendSuccess(res,token,"Login Successfull!", 200);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const logout = async (
   req: Request,
