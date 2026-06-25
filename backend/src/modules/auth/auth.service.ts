@@ -38,3 +38,36 @@ export const signup = async (data: Signup) => {
   const { password: _, ...safeUser } = newUser;
   return { message: "success", user: safeUser };
 };
+
+export const login = async (data: Login) => {
+  const { username, password } = data;
+  if (!username || !password) {
+    throw new AppError("Username and password are required", 400);
+  }
+  const user = await prisma.user.findFirst({
+    where: {
+      username,
+    },
+  });
+  if (!user) {
+    throw new AppError("Invalid Credentials", 401);
+  }
+
+  const verifyPassword = await argon2.verify(user?.password, password);
+  if (!verifyPassword) {
+    throw new AppError("Invalid Credentials", 401);
+  }
+  const token = jwt.sign(
+    {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+    },
+    JWT_SECRET,
+    { expiresIn: "1d" },
+  );
+  return token;
+};
+
+export const logout = async () => {};
