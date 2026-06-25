@@ -4,7 +4,14 @@ export const signup = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {};
+) => {
+  try {
+    const user = await authService.signup(req.body);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const login = async (
   req: Request,
