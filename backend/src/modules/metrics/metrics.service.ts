@@ -1,3 +1,5 @@
+import { sendMessage } from "../../kafka/producer";
+
 export interface MetricPayload {
   service: string;
   endpoint: string;
@@ -13,9 +15,6 @@ export const ingestMetric = async (payload: MetricPayload) => {
     ...payload,
     timestamp: payload.timestamp ?? new Date().toISOString(),
   };
-
-  // Later:
-  // await kafkaProducer.publish("metrics.raw", event);
-
+  await sendMessage("metrics", event);
   return event;
 };
