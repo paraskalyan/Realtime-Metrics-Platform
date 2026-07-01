@@ -8,6 +8,7 @@ export const connectProducer = async () => {
     logger.info("Producer connected");
 }
 
+// Use this to send message to kafka
 export const sendMessage = async (topic: string, message: unknown) => {
     await producer.send({
         topic,
