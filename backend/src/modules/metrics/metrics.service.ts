@@ -15,8 +15,6 @@ export const ingestMetric = async (payload: MetricPayload) => {
     ...payload,
     timestamp: payload.timestamp ?? new Date().toISOString(),
   };
-  
-  // Send the metric event to the Kafka topic "metrics"
   await sendMessage("metrics", event);
   return event;
 };
