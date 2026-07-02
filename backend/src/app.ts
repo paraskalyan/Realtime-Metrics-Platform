@@ -11,7 +11,7 @@ const PORT = config.PORT;
 
 app.use(express.json());
 
-
+// Test Endpoint
 app.get('/', (req: Request, res: Response) => {
   logger.info("/ endpoint hit")
   res.json({ message: 'Hello from Express with TypeScript and ESM!' });
